@@ -1,0 +1,40 @@
+{% extends 'recommendation/base_admin.html' %}
+
+{% block admin_content %}
+<div class="max-w-2xl animate-fade-in">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-coffee-800 mb-1">{{ title }}</h1>
+        <p class="text-coffee-400 text-sm">Silakan isi formulir di bawah ini.</p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg border border-coffee-100/60 p-8">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="space-y-6">
+                {% for field in form %}
+                <div>
+                    <label class="block text-xs font-semibold text-coffee-500 uppercase tracking-wider mb-2">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                    {% if field.errors %}
+                    <div class="text-red-500 text-xs mt-1">
+                        {{ field.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="mt-10 flex gap-4">
+                <button type="submit" class="btn-glow bg-gradient-to-r from-coffee-600 to-coffee-700 text-white font-semibold py-3 px-10 rounded-xl text-sm shadow-md">
+                    Simpan
+                </button>
+                <a href="{% url 'recommendation:admin_users' %}" class="border border-coffee-200 text-coffee-600 font-semibold py-3 px-10 rounded-xl text-sm hover:bg-coffee-50 transition-colors">
+                    Batal
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

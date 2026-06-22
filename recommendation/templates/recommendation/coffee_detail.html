@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-6 py-10 animate-fade-in">
+    <a href="javascript:history.back()" class="inline-flex items-center gap-1 text-sm text-coffee-400 hover:text-coffee-600 mb-8 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        Kembali
+    </a>
+
+    <div class="bg-white rounded-2xl shadow-lg border border-coffee-100/60 overflow-hidden">
+        <div class="flex flex-col md:flex-row">
+            <!-- Image -->
+            <div class="md:w-2/5 aspect-square bg-gradient-to-br from-coffee-50 to-coffee-100 flex items-center justify-center relative overflow-hidden">
+                {% if menu.image %}
+                    <img src="{{ menu.image.url }}" alt="{{ menu.nama_menu }}" class="w-full h-full object-cover">
+                {% else %}
+                    <div class="flex flex-col items-center gap-2 text-coffee-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                        </svg>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Detail -->
+            <div class="md:w-3/5 p-8 flex flex-col justify-center">
+                <h2 class="text-2xl font-bold text-coffee-800 mb-4">{{ menu.nama_menu }}</h2>
+                <p class="text-sm text-coffee-500 leading-relaxed mb-8">{{ menu.description }}</p>
+
+                <!-- Characteristics -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-cream-50 rounded-xl px-4 py-3 border border-coffee-100/50">
+                        <span class="text-[0.65rem] font-bold text-coffee-300 uppercase tracking-wider">Manis</span>
+                        <div class="text-lg font-bold text-coffee-700">{{ menu.kemanisan }}<span class="text-xs text-coffee-300">/5</span></div>
+                    </div>
+                    <div class="bg-cream-50 rounded-xl px-4 py-3 border border-coffee-100/50">
+                        <span class="text-[0.65rem] font-bold text-coffee-300 uppercase tracking-wider">Pahit</span>
+                        <div class="text-lg font-bold text-coffee-700">{{ menu.kepahitan }}<span class="text-xs text-coffee-300">/5</span></div>
+                    </div>
+                    <div class="bg-cream-50 rounded-xl px-4 py-3 border border-coffee-100/50">
+                        <span class="text-[0.65rem] font-bold text-coffee-300 uppercase tracking-wider">Asam</span>
+                        <div class="text-lg font-bold text-coffee-700">{{ menu.keasaman }}<span class="text-xs text-coffee-300">/5</span></div>
+                    </div>
+                    <div class="bg-cream-50 rounded-xl px-4 py-3 border border-coffee-100/50">
+                        <span class="text-[0.65rem] font-bold text-coffee-300 uppercase tracking-wider">Body</span>
+                        <div class="text-lg font-bold text-coffee-700">{{ menu.body }}<span class="text-xs text-coffee-300">/5</span></div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mt-6">
+                    <span class="text-xs bg-coffee-50 text-coffee-600 px-3 py-1.5 rounded-full font-medium border border-coffee-100">
+                        Aroma: 
+                        {% if menu.aroma == 1 %}Ringan{% elif menu.aroma == 2 %}Sedang{% elif menu.aroma == 3 %}Kuat{% else %}{{ menu.aroma }}{% endif %}
+                    </span>
+                    <span class="text-xs bg-coffee-50 text-coffee-600 px-3 py-1.5 rounded-full font-medium border border-coffee-100">
+                        {% if menu.jenis == 1 %}Arabica{% elif menu.jenis == 2 %}Robusta{% elif menu.jenis == 3 %}Blend{% else %}Kategori {{ menu.jenis }}{% endif %}
+                    </span>
+                    <span class="text-xs bg-coffee-50 text-coffee-600 px-3 py-1.5 rounded-full font-medium border border-coffee-100">
+                        Kafein: 
+                        {% if menu.kafein == 1 %}Rendah{% elif menu.kafein == 2 %}Sedang{% elif menu.kafein == 3 %}Tinggi{% else %}{{ menu.kafein }}{% endif %}
+                    </span>
+                    {% if menu.susu %}
+                    <span class="text-xs bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-medium border border-blue-100">Dengan Susu</span>
+                    {% endif %}
+                    <span class="text-xs {% if menu.suhu %}bg-red-50 text-red-600 border-red-100{% else %}bg-sky-50 text-sky-600 border-sky-100{% endif %} px-3 py-1.5 rounded-full font-medium border">
+                        {% if menu.suhu %}Panas{% else %}Dingin{% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

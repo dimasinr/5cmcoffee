@@ -1,0 +1,127 @@
+{% extends 'recommendation/base_admin.html' %}
+
+{% block admin_content %}
+<div class="max-w-3xl animate-fade-in">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-coffee-800 mb-1">{{ title }}</h1>
+        <p class="text-coffee-400 text-sm">Silakan isi detail menu kopi di bawah ini.</p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg border border-coffee-100/60 p-8">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <!-- Info Utama -->
+                <div class="space-y-6 md:col-span-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-coffee-500 uppercase tracking-wider mb-2">Nama Menu</label>
+                        {{ form.nama_menu }}
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-coffee-500 uppercase tracking-wider mb-2">Deskripsi</label>
+                        {{ form.description }}
+                    </div>
+                </div>
+
+                <!-- Karakteristik -->
+                <div class="space-y-6">
+                    <h3 class="text-xs font-bold text-coffee-400 uppercase tracking-widest border-b border-coffee-100 pb-2">Karakteristik Rasa</h3>
+                    
+                    {% for field in form %}
+                        {% if field.name in "kemanisan,kepahitan,keasaman,body" %}
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <label class="text-[0.65rem] font-bold text-coffee-700 uppercase tracking-wider">{{ field.label }}</label>
+                                <span class="text-[0.65rem] font-bold text-coffee-400" id="val_{{ field.name }}">3</span>
+                            </div>
+                            {{ field }}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Detail Teknis -->
+                <div class="space-y-6">
+                    <h3 class="text-xs font-bold text-coffee-400 uppercase tracking-widest border-b border-coffee-100 pb-2">Detail Teknis</h3>
+                    
+                    {% for field in form %}
+                        {% if field.name in "aroma,jenis,kafein" %}
+                        <div>
+                            <label class="text-[0.65rem] font-bold text-coffee-700 uppercase tracking-wider block mb-2">{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    <div class="flex gap-6 pt-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            {{ form.susu }}
+                            <span class="text-xs font-semibold text-coffee-600">Susu</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            {{ form.suhu }}
+                            <span class="text-xs font-semibold text-coffee-600">Panas</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Image -->
+                <div class="md:col-span-2 pt-4">
+                    <label class="block text-xs font-semibold text-coffee-500 uppercase tracking-wider mb-2">Gambar Menu</label>
+                    <div class="flex items-center gap-6">
+                        {% if menu.image %}
+                        <img src="{{ menu.image.url }}" class="w-24 h-24 rounded-xl object-cover border border-coffee-100">
+                        {% endif %}
+                        <div class="flex-grow">
+                            {{ form.image }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-10 flex gap-4 border-t border-coffee-50 pt-8">
+                <button type="submit" class="btn-glow bg-gradient-to-r from-coffee-600 to-coffee-700 text-white font-semibold py-3 px-10 rounded-xl text-sm shadow-md">
+                    Simpan Perubahan
+                </button>
+                <a href="{% url 'recommendation:admin_menu' %}" class="border border-coffee-200 text-coffee-600 font-semibold py-3 px-10 rounded-xl text-sm hover:bg-coffee-50 transition-colors">
+                    Batal
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fields = ['kemanisan', 'kepahitan', 'keasaman', 'body'];
+        fields.forEach(f => {
+            const el = document.getElementsByName(f)[0];
+            const valEl = document.getElementById('val_' + f);
+            if(el && valEl) {
+                valEl.textContent = el.value;
+                el.addEventListener('input', function() { valEl.textContent = this.value; });
+            }
+        });
+    });
+</script>
+
+<style>
+    input[type="range"] {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 4px;
+        border-radius: 999px;
+        background: #e8caa8;
+        outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #7a4f2b;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}

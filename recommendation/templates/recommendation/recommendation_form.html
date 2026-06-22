@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+<style>
+    /* Custom range slider */
+    input[type="range"] {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 6px;
+        border-radius: 999px;
+        outline: none;
+        background: linear-gradient(to right, #e8caa8, #9e6b3a);
+        cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #7a4f2b, #5c3a1f);
+        border: 3px solid #fff;
+        box-shadow: 0 2px 8px rgba(94, 58, 31, 0.3);
+        cursor: pointer;
+        transition: transform 0.15s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+    }
+    input[type="range"]::-moz-range-thumb {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #7a4f2b, #5c3a1f);
+        border: 3px solid #fff;
+        box-shadow: 0 2px 8px rgba(94, 58, 31, 0.3);
+        cursor: pointer;
+    }
+
+    /* Custom toggle switch */
+    .toggle-switch {
+        position: relative;
+        width: 48px;
+        height: 26px;
+        display: inline-block;
+    }
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #e8caa8;
+        border-radius: 999px;
+        transition: 0.3s;
+    }
+    .toggle-slider::before {
+        content: '';
+        position: absolute;
+        height: 20px;
+        width: 20px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.3s;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .toggle-switch input:checked + .toggle-slider {
+        background: linear-gradient(135deg, #7a4f2b, #9e6b3a);
+    }
+    .toggle-switch input:checked + .toggle-slider::before {
+        transform: translateX(22px);
+    }
+
+    /* Custom radio */
+    .radio-card input[type="radio"] {
+        display: none;
+    }
+    .radio-card label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border: 1.5px solid #e8caa8;
+        border-radius: 0.75rem;
+        cursor: pointer;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: #7a4f2b;
+        background: #FFFDF8;
+        transition: all 0.2s ease;
+    }
+    .radio-card input[type="radio"]:checked + label,
+    .radio-card label:has(input[type="radio"]:checked) {
+        background: linear-gradient(135deg, #7a4f2b, #5c3a1f);
+        color: white;
+        border-color: #5c3a1f;
+        box-shadow: 0 2px 8px rgba(94, 58, 31, 0.2);
+    }
+    .radio-card label:hover {
+        border-color: #9e6b3a;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-10 animate-fade-in">
+    <!-- Section Header -->
+    <div class="mb-10">
+        <h1 class="text-3xl font-bold text-coffee-800 mb-2">Mengisi Preferensi Kopi</h1>
+        <p class="text-coffee-400 text-sm">Geser slider dan pilih sesuai selera Anda, lalu sistem kami akan menemukan kopi terbaik untuk Anda.</p>
+    </div>
+
+    <form method="POST" id="recommendationForm">
+        {% csrf_token %}
+
+        <div class="bg-white rounded-2xl shadow-lg border border-coffee-100/60 p-8 md:p-10">
+            <div class="flex flex-col md:flex-row w-full gap-10 md:gap-16">
+                <!-- Left Column: Sliders -->
+                <div class="flex-1 flex flex-col gap-7">
+                    <h3 class="text-xs font-bold text-coffee-400 uppercase tracking-widest border-b border-coffee-100 pb-2 mb-1">Karakteristik Rasa</h3>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-semibold text-coffee-700">Kemanisan</label>
+                            <span id="val_kemanisan" class="text-sm font-bold text-coffee-500 bg-coffee-50 px-2.5 py-0.5 rounded-lg">3</span>
+                        </div>
+                        {{ form.kemanisan }}
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-semibold text-coffee-700">Kepahitan</label>
+                            <span id="val_kepahitan" class="text-sm font-bold text-coffee-500 bg-coffee-50 px-2.5 py-0.5 rounded-lg">3</span>
+                        </div>
+                        {{ form.kepahitan }}
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-semibold text-coffee-700">Keasaman</label>
+                            <span id="val_keasaman" class="text-sm font-bold text-coffee-500 bg-coffee-50 px-2.5 py-0.5 rounded-lg">3</span>
+                        </div>
+                        {{ form.keasaman }}
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-semibold text-coffee-700">Body</label>
+                            <span id="val_body" class="text-sm font-bold text-coffee-500 bg-coffee-50 px-2.5 py-0.5 rounded-lg">3</span>
+                        </div>
+                        {{ form.body }}
+                    </div>
+
+                    <div>
+                        <label class="text-sm font-semibold text-coffee-700 block mb-3">Aroma</label>
+                        <div class="flex gap-3">
+                            {% for radio in form.aroma %}
+                            <div class="radio-card">
+                                {{ radio.tag }}
+                                <label for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Choices -->
+                <div class="flex-1 flex flex-col gap-7">
+                    <h3 class="text-xs font-bold text-coffee-400 uppercase tracking-widest border-b border-coffee-100 pb-2 mb-1">Detail Lainnya</h3>
+
+                    <!-- Toggles -->
+                    <div>
+                        <label class="text-sm font-semibold text-coffee-700 block mb-3">Susu</label>
+                        <div class="flex items-center justify-between bg-cream-50 border border-coffee-100 rounded-xl px-4 py-3">
+                            <span class="text-sm text-coffee-500">Dengan Susu</span>
+                            <label class="toggle-switch">
+                                {{ form.susu }}
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-sm font-semibold text-coffee-700 block mb-3">Suhu</label>
+                        <div class="flex items-center justify-between bg-cream-50 border border-coffee-100 rounded-xl px-4 py-3">
+                            <span class="text-sm text-coffee-500">Disajikan Panas</span>
+                            <label class="toggle-switch">
+                                {{ form.suhu }}
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-sm font-semibold text-coffee-700 block mb-3">Jenis Biji Kopi</label>
+                        <div class="flex gap-3">
+                            {% for radio in form.jenis_kopi %}
+                            <div class="radio-card">
+                                {{ radio.tag }}
+                                <label for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-sm font-semibold text-coffee-700 block mb-3">Level Kafein</label>
+                        <div class="flex gap-3">
+                            {% for radio in form.kafein %}
+                            <div class="radio-card">
+                                {{ radio.tag }}
+                                <label for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="mt-10 flex justify-end">
+                <button type="submit" class="btn-glow bg-gradient-to-r from-coffee-600 to-coffee-700 text-white font-semibold py-3 px-10 rounded-xl text-sm shadow-md flex items-center gap-2">
+                    <span>Simpan Preferensi</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sliders = [
+            {name: 'kemanisan', display: 'val_kemanisan'},
+            {name: 'kepahitan', display: 'val_kepahitan'},
+            {name: 'keasaman', display: 'val_keasaman'},
+            {name: 'body', display: 'val_body'}
+        ];
+        sliders.forEach(s => {
+            const el = document.getElementsByName(s.name)[0];
+            const valEl = document.getElementById(s.display);
+            if(el && valEl) {
+                valEl.textContent = el.value;
+                el.addEventListener('input', function() { valEl.textContent = this.value; });
+            }
+        });
+    });
+</script>
+{% endblock %}
