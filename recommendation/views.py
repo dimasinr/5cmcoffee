@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.decorators import login_required
@@ -238,3 +239,30 @@ def admin_user_delete(request, pk):
         user_to_delete.delete()
         messages.success(request, 'Pengguna berhasil dihapus.')
     return redirect('recommendation:admin_users')
+
+@login_required
+def admin_preferensi(request):
+    if not request.user.is_staff:
+        return redirect('recommendation:form')
+    
+    preferensi_list = Preferensi.objects.select_related('id_user').order_by('-created_at')
+    
+    # Filter by user search
+    search_query = request.GET.get('q', '').strip()
+    if search_query:
+        preferensi_list = preferensi_list.filter(
+            id_user__nama__icontains=search_query
+        ) | preferensi_list.filter(
+            id_user__email__icontains=search_query
+        )
+        preferensi_list = preferensi_list.order_by('-created_at')
+    
+    paginator = Paginator(preferensi_list, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'recommendation/admin_preferensi.html', {
+        'page_obj': page_obj,
+        'search_query': search_query,
+        'total': preferensi_list.count(),
+    })

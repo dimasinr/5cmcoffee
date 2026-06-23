@@ -2,14 +2,14 @@
 
 {% block extra_head %}
 <style>
-    /* Custom range slider */
+    /* Custom range slider — forest green theme */
     input[type="range"] {
         -webkit-appearance: none;
         width: 100%;
         height: 6px;
         border-radius: 999px;
         outline: none;
-        background: linear-gradient(to right, #e8caa8, #9e6b3a);
+        background: linear-gradient(to right, #D7C7B2, #1B4332);
         cursor: pointer;
     }
     input[type="range"]::-webkit-slider-thumb {
@@ -17,92 +17,77 @@
         width: 22px;
         height: 22px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #7a4f2b, #5c3a1f);
+        background: linear-gradient(135deg, #1B4332, #2D5A46);
         border: 3px solid #fff;
-        box-shadow: 0 2px 8px rgba(94, 58, 31, 0.3);
+        box-shadow: 0 2px 8px rgba(27, 67, 50, 0.35);
         cursor: pointer;
         transition: transform 0.15s ease;
     }
-    input[type="range"]::-webkit-slider-thumb:hover {
-        transform: scale(1.2);
-    }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
     input[type="range"]::-moz-range-thumb {
         width: 22px;
         height: 22px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #7a4f2b, #5c3a1f);
+        background: linear-gradient(135deg, #1B4332, #2D5A46);
         border: 3px solid #fff;
-        box-shadow: 0 2px 8px rgba(94, 58, 31, 0.3);
+        box-shadow: 0 2px 8px rgba(27, 67, 50, 0.35);
         cursor: pointer;
     }
 
     /* Custom toggle switch */
     .toggle-switch {
         position: relative;
-        width: 48px;
-        height: 26px;
+        width: 48px; height: 26px;
         display: inline-block;
     }
-    .toggle-switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
     .toggle-slider {
         position: absolute;
         cursor: pointer;
         top: 0; left: 0; right: 0; bottom: 0;
-        background-color: #e8caa8;
+        background-color: #D7C7B2;
         border-radius: 999px;
         transition: 0.3s;
     }
     .toggle-slider::before {
         content: '';
         position: absolute;
-        height: 20px;
-        width: 20px;
-        left: 3px;
-        bottom: 3px;
+        height: 20px; width: 20px;
+        left: 3px; bottom: 3px;
         background-color: white;
         border-radius: 50%;
         transition: 0.3s;
         box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     }
     .toggle-switch input:checked + .toggle-slider {
-        background: linear-gradient(135deg, #7a4f2b, #9e6b3a);
+        background: linear-gradient(135deg, #1B4332, #2D5A46);
     }
-    .toggle-switch input:checked + .toggle-slider::before {
-        transform: translateX(22px);
-    }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(22px); }
 
-    /* Custom radio */
-    .radio-card input[type="radio"] {
-        display: none;
-    }
+    /* Custom radio card */
+    .radio-card input[type="radio"] { display: none; }
     .radio-card label {
         display: flex;
         align-items: center;
         gap: 0.5rem;
         padding: 0.5rem 1rem;
-        border: 1.5px solid #e8caa8;
+        border: 1.5px solid #D7C7B2;
         border-radius: 0.75rem;
         cursor: pointer;
         font-size: 0.8125rem;
         font-weight: 500;
-        color: #7a4f2b;
-        background: #FFFDF8;
+        color: #224F3D;
+        background: #F2EBE1;
         transition: all 0.2s ease;
     }
     .radio-card input[type="radio"]:checked + label,
     .radio-card label:has(input[type="radio"]:checked) {
-        background: linear-gradient(135deg, #7a4f2b, #5c3a1f);
+        background: linear-gradient(135deg, #1B4332, #153527);
         color: white;
-        border-color: #5c3a1f;
-        box-shadow: 0 2px 8px rgba(94, 58, 31, 0.2);
+        border-color: #153527;
+        box-shadow: 0 2px 8px rgba(27, 67, 50, 0.25);
     }
-    .radio-card label:hover {
-        border-color: #9e6b3a;
-    }
+    .radio-card label:hover { border-color: #2D5A46; }
 </style>
 {% endblock %}
 

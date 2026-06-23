@@ -1,0 +1,211 @@
+{% extends 'recommendation/base_admin.html' %}
+
+{% block admin_content %}
+<!-- Header -->
+<div class="flex items-start justify-between mb-6">
+    <div>
+        <h1 class="text-3xl font-bold text-coffee-800 mb-1">Riwayat Preferensi</h1>
+        <p class="text-coffee-400 text-sm">Seluruh riwayat input preferensi dari pengguna terdaftar.</p>
+    </div>
+    <div class="bg-coffee-600 text-white text-sm font-semibold px-4 py-2 rounded-xl shadow-sm">
+        Total: {{ total }} data
+    </div>
+</div>
+
+<!-- Search Bar -->
+<form method="GET" action="" class="mb-5 flex gap-3">
+    <div class="relative flex-grow">
+        <span class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-coffee-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </span>
+        <input
+            type="text"
+            name="q"
+            value="{{ search_query }}"
+            placeholder="Cari berdasarkan nama atau email pengguna..."
+            class="w-full pl-9 pr-4 py-2.5 text-sm border border-coffee-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-coffee-400 focus:border-coffee-400 bg-white text-coffee-800 placeholder-coffee-200 transition-all"
+        >
+    </div>
+    <button type="submit" class="btn-glow bg-coffee-600 text-white font-semibold py-2.5 px-5 rounded-xl text-sm shadow-sm">
+        Cari
+    </button>
+    {% if search_query %}
+    <a href="{% url 'recommendation:admin_preferensi' %}" class="flex items-center gap-1.5 border border-coffee-100 text-coffee-500 hover:bg-coffee-50 font-medium py-2.5 px-4 rounded-xl text-sm transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        Reset
+    </a>
+    {% endif %}
+</form>
+
+<!-- Table -->
+<div class="bg-white rounded-2xl shadow-lg border border-coffee-100/60 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="bg-gradient-to-r from-coffee-700 to-coffee-800 text-white">
+                    <th class="py-3.5 px-4 text-left font-semibold tracking-wide">#</th>
+                    <th class="py-3.5 px-4 text-left font-semibold tracking-wide">Pengguna</th>
+                    <th class="py-3.5 px-4 text-center font-semibold tracking-wide">Manis</th>
+                    <th class="py-3.5 px-4 text-center font-semibold tracking-wide">Pahit</th>
+                    <th class="py-3.5 px-4 text-center font-semibold tracking-wide">Asam</th>
+                    <th class="py-3.5 px-4 text-center font-semibold tracking-wide">Body</th>
+                    <th class="py-3.5 px-4 text-center font-semibold tracking-wide">Aroma</th>
+                    <th class="py-3.5 px-4 text-center font-semibold tracking-wide">Susu</th>
+                    <th class="py-3.5 px-4 text-center font-semibold tracking-wide">Suhu</th>
+                    <th class="py-3.5 px-4 text-center font-semibold tracking-wide">Kafein</th>
+                    <th class="py-3.5 px-4 text-left font-semibold tracking-wide">Waktu</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pref in page_obj %}
+                <tr class="border-b border-coffee-50 hover:bg-cream-50 transition-colors">
+                    <!-- Nomor urut global -->
+                    <td class="py-3 px-4 text-coffee-400 font-medium">
+                        {{ page_obj.start_index|add:forloop.counter0 }}
+                    </td>
+                    <!-- Pengguna -->
+                    <td class="py-3 px-4">
+                        <div class="font-semibold text-coffee-800">{{ pref.id_user.nama }}</div>
+                        <div class="text-xs text-coffee-300 mt-0.5">{{ pref.id_user.email }}</div>
+                    </td>
+                    <!-- Nilai-nilai preferensi -->
+                    <td class="py-3 px-4 text-center">
+                        <span class="inline-block w-7 h-7 rounded-full bg-coffee-50 text-coffee-700 font-bold text-xs leading-7">{{ pref.kemanisan }}</span>
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <span class="inline-block w-7 h-7 rounded-full bg-coffee-50 text-coffee-700 font-bold text-xs leading-7">{{ pref.kepahitan }}</span>
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <span class="inline-block w-7 h-7 rounded-full bg-coffee-50 text-coffee-700 font-bold text-xs leading-7">{{ pref.keasaman }}</span>
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <span class="inline-block w-7 h-7 rounded-full bg-coffee-50 text-coffee-700 font-bold text-xs leading-7">{{ pref.body }}</span>
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <span class="inline-block w-7 h-7 rounded-full bg-coffee-50 text-coffee-700 font-bold text-xs leading-7">{{ pref.aroma }}</span>
+                    </td>
+                    <!-- Susu -->
+                    <td class="py-3 px-4 text-center">
+                        {% if pref.susu %}
+                        <span class="inline-flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            Ya
+                        </span>
+                        {% else %}
+                        <span class="inline-flex items-center gap-1 text-xs bg-red-50 text-red-500 px-2 py-0.5 rounded-full font-semibold">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                            Tidak
+                        </span>
+                        {% endif %}
+                    </td>
+                    <!-- Suhu -->
+                    <td class="py-3 px-4 text-center">
+                        {% if pref.suhu %}
+                        <span class="inline-flex items-center gap-1 text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-semibold">🔥 Panas</span>
+                        {% else %}
+                        <span class="inline-flex items-center gap-1 text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">❄️ Dingin</span>
+                        {% endif %}
+                    </td>
+                    <!-- Kafein -->
+                    <td class="py-3 px-4 text-center">
+                        <span class="inline-block w-7 h-7 rounded-full bg-coffee-50 text-coffee-700 font-bold text-xs leading-7">{{ pref.kafein }}</span>
+                    </td>
+                    <!-- Waktu -->
+                    <td class="py-3 px-4 text-xs text-coffee-400 whitespace-nowrap">
+                        {{ pref.created_at|date:"d M Y" }}<br>
+                        <span class="text-coffee-300">{{ pref.created_at|time:"H:i" }} WIB</span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="11" class="py-12 text-center text-coffee-300">
+                        <div class="flex flex-col items-center gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-coffee-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <p class="font-medium">
+                                {% if search_query %}
+                                    Tidak ada riwayat yang cocok dengan "<strong>{{ search_query }}</strong>".
+                                {% else %}
+                                    Belum ada riwayat preferensi.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Pagination -->
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="mt-6 flex items-center justify-between">
+    <p class="text-sm text-coffee-400">
+        Menampilkan <span class="font-semibold text-coffee-700">{{ page_obj.start_index }}–{{ page_obj.end_index }}</span>
+        dari <span class="font-semibold text-coffee-700">{{ total }}</span> data
+    </p>
+
+    <nav class="flex items-center gap-1">
+        <!-- Previous -->
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}"
+           class="flex items-center justify-center w-9 h-9 rounded-lg border border-coffee-100 text-coffee-600 hover:bg-coffee-50 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+        </a>
+        {% else %}
+        <span class="flex items-center justify-center w-9 h-9 rounded-lg border border-coffee-50 text-coffee-200 cursor-not-allowed">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+        </span>
+        {% endif %}
+
+        <!-- Page numbers -->
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <span class="flex items-center justify-center w-9 h-9 rounded-lg bg-coffee-600 text-white font-bold text-sm shadow-md">
+                {{ num }}
+            </span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}"
+               class="flex items-center justify-center w-9 h-9 rounded-lg border border-coffee-100 text-coffee-600 hover:bg-coffee-50 transition-colors text-sm">
+                {{ num }}
+            </a>
+            {% elif num == 1 or num == page_obj.paginator.num_pages %}
+            <a href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}"
+               class="flex items-center justify-center w-9 h-9 rounded-lg border border-coffee-100 text-coffee-600 hover:bg-coffee-50 transition-colors text-sm">
+                {{ num }}
+            </a>
+            {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
+            <span class="flex items-center justify-center w-9 h-9 text-coffee-300 text-sm">…</span>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Next -->
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}"
+           class="flex items-center justify-center w-9 h-9 rounded-lg border border-coffee-100 text-coffee-600 hover:bg-coffee-50 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+        </a>
+        {% else %}
+        <span class="flex items-center justify-center w-9 h-9 rounded-lg border border-coffee-50 text-coffee-200 cursor-not-allowed">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+        </span>
+        {% endif %}
+    </nav>
+</div>
+{% endif %}
+
+{% endblock %}

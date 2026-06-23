@@ -4,33 +4,33 @@
 <!-- Hero Section -->
 <section class="coffee-gradient text-white py-20 relative overflow-hidden">
     <div class="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center"></div>
-    <div class="max-w-7xl mx-auto px-4 relative z-10 text-center">
+    <div class="max-w-7xl mx-auto px-4 relative z-10 text-center animate-fade-in">
         <h1 class="text-5xl md:text-6xl font-bold mb-6">Temukan Kopi Sempurnamu</h1>
         <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto opacity-90">Sistem rekomendasi pintar berbasis AI (KNN) yang menganalisis preferensi rasa Anda untuk mencarikan signature drink yang paling cocok.</p>
-        <a href="{% url 'recommendation:form' %}" class="inline-block bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 px-10 rounded-full text-lg transition-all transform hover:scale-105 shadow-lg">
+        <a href="{% url 'recommendation:form' %}" class="inline-block bg-coffee-300 hover:bg-coffee-300/90 text-white font-bold py-4 px-10 rounded-full text-lg transition-all transform hover:scale-105 shadow-lg">
             Mulai Rekomendasi
         </a>
     </div>
 </section>
 
 <!-- Stats/Info Section -->
-<section class="py-12 bg-white">
+<section class="py-12 bg-white/60 backdrop-blur">
     <div class="max-w-7xl mx-auto px-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div class="p-6 rounded-2xl bg-amber-50">
+            <div class="p-6 rounded-2xl bg-cream-50 border border-coffee-100 shadow-sm card-hover">
                 <div class="text-4xl mb-4">🎯</div>
-                <h3 class="text-xl font-bold mb-2 text-coffee">Akurasi Tinggi</h3>
-                <p class="text-gray-600">Menggunakan algoritma K-Nearest Neighbor untuk mencocokkan profil rasa dengan menu kami.</p>
+                <h3 class="text-xl font-bold mb-2 text-coffee-600">Akurasi Tinggi</h3>
+                <p class="text-coffee-800">Menggunakan algoritma K-Nearest Neighbor untuk mencocokkan profil rasa dengan menu kami.</p>
             </div>
-            <div class="p-6 rounded-2xl bg-amber-50">
+            <div class="p-6 rounded-2xl bg-cream-50 border border-coffee-100 shadow-sm card-hover">
                 <div class="text-4xl mb-4">☕</div>
-                <h3 class="text-xl font-bold mb-2 text-coffee">{{ total_menus }} Menu Tersedia</h3>
-                <p class="text-gray-600">Beragam pilihan dari espresso base, manual brew, hingga signature latte.</p>
+                <h3 class="text-xl font-bold mb-2 text-coffee-600">{{ total_menus }} Menu Tersedia</h3>
+                <p class="text-coffee-800">Beragam pilihan dari espresso base, manual brew, hingga signature latte.</p>
             </div>
-            <div class="p-6 rounded-2xl bg-amber-50">
+            <div class="p-6 rounded-2xl bg-cream-50 border border-coffee-100 shadow-sm card-hover">
                 <div class="text-4xl mb-4">✨</div>
-                <h3 class="text-xl font-bold mb-2 text-coffee">Personalized</h3>
-                <p class="text-gray-600">Hasil rekomendasi diurutkan berdasarkan tingkat kemiripan (similarity score) dengan selera Anda.</p>
+                <h3 class="text-xl font-bold mb-2 text-coffee-600">Personalized</h3>
+                <p class="text-coffee-800">Hasil rekomendasi diurutkan berdasarkan tingkat kemiripan (similarity score) dengan selera Anda.</p>
             </div>
         </div>
     </div>
@@ -39,30 +39,30 @@
 <!-- Signature Drinks -->
 <section class="py-16">
     <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-12 text-coffee">Signature Drinks Kami</h2>
+        <h2 class="text-3xl font-bold text-center mb-12 text-coffee-600">Signature Drinks Kami</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for drink in signature_drinks %}
-            <div class="glass-card rounded-2xl overflow-hidden hover:-translate-y-2 transition-transform duration-300">
-                <div class="h-48 bg-amber-100 flex items-center justify-center relative">
+            <div class="bg-white rounded-2xl overflow-hidden shadow-md card-hover border border-coffee-100/50">
+                <div class="h-48 bg-coffee-50 flex items-center justify-center relative">
                     {% if drink.image %}
                         <img src="{{ drink.image.url }}" alt="{{ drink.name }}" class="w-full h-full object-cover">
                     {% else %}
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-amber-800 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-coffee-300 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     {% endif %}
                 </div>
                 <div class="p-6">
-                    <h3 class="text-xl font-bold mb-2">{{ drink.name }}</h3>
-                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ drink.description|default:"Tidak ada deskripsi." }}</p>
+                    <h3 class="text-xl font-bold mb-2 text-coffee-800">{{ drink.name }}</h3>
+                    <p class="text-coffee-800 text-sm mb-4 line-clamp-2">{{ drink.description|default:"Tidak ada deskripsi." }}</p>
                     <div class="flex flex-wrap gap-2">
-                        <span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Kemanisan: {{ drink.sweetness_level }}/5</span>
-                        <span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">{{ drink.get_coffee_type_label }}</span>
+                        <span class="text-xs bg-coffee-100 text-coffee-600 px-2.5 py-1 rounded-full font-semibold">Kemanisan: {{ drink.sweetness_level }}/5</span>
+                        <span class="text-xs bg-coffee-100 text-coffee-600 px-2.5 py-1 rounded-full font-semibold">{{ drink.get_coffee_type_label }}</span>
                     </div>
                 </div>
             </div>
             {% empty %}
-            <div class="col-span-full text-center text-gray-500 py-10">
+            <div class="col-span-full text-center text-coffee-300 py-10">
                 Belum ada data menu kopi.
             </div>
             {% endfor %}

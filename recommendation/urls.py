@@ -19,4 +19,5 @@ urlpatterns = [
     path('admin-users/add/', views.admin_user_add, name='admin_user_add'),
     path('admin-users/edit/<int:pk>/', views.admin_user_edit, name='admin_user_edit'),
     path('admin-users/delete/<int:pk>/', views.admin_user_delete, name='admin_user_delete'),
+    path('admin-preferensi/', views.admin_preferensi, name='admin_preferensi'),
 ]
