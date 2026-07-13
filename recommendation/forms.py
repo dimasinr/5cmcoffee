@@ -10,8 +10,8 @@ CAFFEINE_CHOICES = [(1, 'Rendah'), (2, 'Sedang'), (3, 'Tinggi')]
 COFFEE_TYPE_CHOICES = [(1, 'Arabica'), (2, 'Robusta'), (3, 'Blend')]
 
 class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'w-full border border-coffee-200 rounded-xl px-4 py-2 bg-cream-50 focus:ring-2 focus:ring-coffee-300 outline-none'}))
-    password_confirm = forms.CharField(label='Konfirmasi Password', widget=forms.PasswordInput(attrs={'class': 'w-full border border-coffee-200 rounded-xl px-4 py-2 bg-cream-50 focus:ring-2 focus:ring-coffee-300 outline-none'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'w-full border border-coffee-200 rounded-xl px-4 py-2 bg-cream-50 focus:ring-2 focus:ring-coffee-300 outline-none', 'required': 'required'}))
+    password_confirm = forms.CharField(label='Konfirmasi Password', widget=forms.PasswordInput(attrs={'class': 'w-full border border-coffee-200 rounded-xl px-4 py-2 bg-cream-50 focus:ring-2 focus:ring-coffee-300 outline-none', 'required': 'required'}))
 
     class Meta:
         model = User
@@ -21,8 +21,8 @@ class UserRegistrationForm(forms.ModelForm):
             'email': 'Alamat Email',
         }
         widgets = {
-            'nama': forms.TextInput(attrs={'class': 'w-full border border-coffee-200 rounded-xl px-4 py-2 bg-cream-50 focus:ring-2 focus:ring-coffee-300 outline-none'}),
-            'email': forms.EmailInput(attrs={'class': 'w-full border border-coffee-200 rounded-xl px-4 py-2 bg-cream-50 focus:ring-2 focus:ring-coffee-300 outline-none'}),
+            'nama': forms.TextInput(attrs={'class': 'w-full border border-coffee-200 rounded-xl px-4 py-2 bg-cream-50 focus:ring-2 focus:ring-coffee-300 outline-none', 'required': 'required'}),
+            'email': forms.EmailInput(attrs={'class': 'w-full border border-coffee-200 rounded-xl px-4 py-2 bg-cream-50 focus:ring-2 focus:ring-coffee-300 outline-none', 'required': 'required'}),
         }
 
     def clean(self):

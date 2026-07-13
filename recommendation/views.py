@@ -18,7 +18,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('recommendation:form')
+        return redirect('recommendation:form')
     else:
         form = UserRegistrationForm()
     return render(request, 'recommendation/register.html', {'form': form})
@@ -137,8 +137,37 @@ def recommendation_result(request):
     if not results:
         return redirect('recommendation:form')
 
+    # Calculate Skor Rekomendasi (Top 3 based on history of preferences)
+    from collections import Counter
+    past_prefs = Preferensi.objects.filter(id_user=request.user)
+    menu_counts = Counter()
+    
+    for pref in past_prefs:
+        pref_dict = {
+            'kemanisan': pref.kemanisan,
+            'kepahitan': pref.kepahitan,
+            'keasaman': pref.keasaman,
+            'body': pref.body,
+            'aroma': pref.aroma,
+            'susu': pref.susu,
+            'suhu': pref.suhu,
+            'jenis_kopi': pref.jenis_kopi,
+            'kafein': pref.kafein,
+        }
+        rec_results = get_recommendations(pref_dict, k=3)
+        for r in rec_results:
+            menu_counts[r['menu']] += 1
+            
+    top_3_history = []
+    for menu, count in menu_counts.most_common(3):
+        top_3_history.append({
+            'menu': menu,
+            'count': count
+        })
+
     return render(request, 'recommendation/recommendation_result.html', {
         'results': results,
+        'top_3_history': top_3_history,
     })
 
 @login_required

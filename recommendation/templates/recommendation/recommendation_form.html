@@ -114,6 +114,7 @@
                             <span id="val_kemanisan" class="text-sm font-bold text-coffee-500 bg-coffee-50 px-2.5 py-0.5 rounded-lg">3</span>
                         </div>
                         {{ form.kemanisan }}
+                        <div id="desc_kemanisan" class="text-xs text-coffee-400 mt-1 font-medium italic">Sedang</div>
                     </div>
 
                     <div>
@@ -122,6 +123,7 @@
                             <span id="val_kepahitan" class="text-sm font-bold text-coffee-500 bg-coffee-50 px-2.5 py-0.5 rounded-lg">3</span>
                         </div>
                         {{ form.kepahitan }}
+                        <div id="desc_kepahitan" class="text-xs text-coffee-400 mt-1 font-medium italic">Sedang</div>
                     </div>
 
                     <div>
@@ -130,6 +132,7 @@
                             <span id="val_keasaman" class="text-sm font-bold text-coffee-500 bg-coffee-50 px-2.5 py-0.5 rounded-lg">3</span>
                         </div>
                         {{ form.keasaman }}
+                        <div id="desc_keasaman" class="text-xs text-coffee-400 mt-1 font-medium italic">Sedang</div>
                     </div>
 
                     <div>
@@ -138,6 +141,7 @@
                             <span id="val_body" class="text-sm font-bold text-coffee-500 bg-coffee-50 px-2.5 py-0.5 rounded-lg">3</span>
                         </div>
                         {{ form.body }}
+                        <div id="desc_body" class="text-xs text-coffee-400 mt-1 font-medium italic">Sedang</div>
                     </div>
 
                     <div>
@@ -221,18 +225,55 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const sliderDescs = {
+            kemanisan: {
+                1: '1 (Pahit)',
+                2: '2 (Sedikit Manis)',
+                3: '3 (Sedang)',
+                4: '4 (Manis)',
+                5: '5 (Sangat Manis)'
+            },
+            kepahitan: {
+                1: '1 (Tidak Pahit)',
+                2: '2 (Sedikit Pahit)',
+                3: '3 (Sedang)',
+                4: '4 (Pahit)',
+                5: '5 (Sangat Pahit)'
+            },
+            keasaman: {
+                1: '1 (Tidak Asam)',
+                2: '2 (Sedikit Asam)',
+                3: '3 (Sedang)',
+                4: '4 (Asam)',
+                5: '5 (Sangat Asam)'
+            },
+            body: {
+                1: '1 (Sangat Encer)',
+                2: '2 (Encer)',
+                3: '3 (Sedang)',
+                4: '4 (Kental)',
+                5: '5 (Sangat Kental)'
+            }
+        };
         const sliders = [
-            {name: 'kemanisan', display: 'val_kemanisan'},
-            {name: 'kepahitan', display: 'val_kepahitan'},
-            {name: 'keasaman', display: 'val_keasaman'},
-            {name: 'body', display: 'val_body'}
+            {name: 'kemanisan', display: 'val_kemanisan', desc: 'desc_kemanisan'},
+            {name: 'kepahitan', display: 'val_kepahitan', desc: 'desc_kepahitan'},
+            {name: 'keasaman', display: 'val_keasaman', desc: 'desc_keasaman'},
+            {name: 'body', display: 'val_body', desc: 'desc_body'}
         ];
         sliders.forEach(s => {
             const el = document.getElementsByName(s.name)[0];
             const valEl = document.getElementById(s.display);
+            const descEl = document.getElementById(s.desc);
             if(el && valEl) {
-                valEl.textContent = el.value;
-                el.addEventListener('input', function() { valEl.textContent = this.value; });
+                const update = (val) => {
+                    valEl.textContent = val;
+                    if (descEl && sliderDescs[s.name]) {
+                        descEl.textContent = sliderDescs[s.name][val] || '';
+                    }
+                };
+                update(el.value);
+                el.addEventListener('input', function() { update(this.value); });
             }
         });
     });

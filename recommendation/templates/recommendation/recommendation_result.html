@@ -1,45 +1,79 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto px-6 py-10 animate-fade-in">
-    <div class="mb-10">
-        <h1 class="text-3xl font-bold text-coffee-800 mb-2">Rekomendasi Kopi Berdasarkan Preferensi Anda</h1>
-        <p class="text-coffee-400 text-sm">Berikut 3 menu kopi yang paling cocok dengan selera Anda, hasil analisis algoritma KNN.</p>
-    </div>
+<div class="max-w-6xl mx-auto px-6 py-10 animate-fade-in">
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Main Content -->
+        <div class="flex-1">
+            <div class="mb-10">
+                <h1 class="text-3xl font-bold text-coffee-800 mb-2">Rekomendasi Kopi Berdasarkan Preferensi Anda</h1>
+                <p class="text-coffee-400 text-sm">Berikut 3 menu kopi yang paling cocok dengan selera Anda, hasil analisis algoritma KNN.</p>
+            </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
-        {% for item in results %}
-        <a href="{% url 'recommendation:coffee_detail' item.menu.id_menu %}" class="card-hover bg-white rounded-2xl border border-coffee-100/60 overflow-hidden shadow-md group animate-fade-in animate-fade-in-delay-{{ forloop.counter }}">
-            <!-- Image -->
-            <div class="aspect-square bg-gradient-to-br from-coffee-50 to-coffee-100 flex items-center justify-center relative overflow-hidden">
-                {% if item.menu.image %}
-                    <img src="{{ item.menu.image.url }}" alt="{{ item.menu.nama_menu }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                {% else %}
-                    <div class="flex flex-col items-center gap-2 text-coffee-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
-                        </svg>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+                {% for item in results %}
+                <a href="{% url 'recommendation:coffee_detail' item.menu.id_menu %}" class="card-hover bg-white rounded-2xl border border-coffee-100/60 overflow-hidden shadow-md group animate-fade-in animate-fade-in-delay-{{ forloop.counter }}">
+                    <!-- Image -->
+                    <div class="aspect-square bg-gradient-to-br from-coffee-50 to-coffee-100 flex items-center justify-center relative overflow-hidden">
+                        {% if item.menu.image %}
+                            <img src="{{ item.menu.image.url }}" alt="{{ item.menu.nama_menu }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        {% else %}
+                            <div class="flex flex-col items-center gap-2 text-coffee-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                                </svg>
+                            </div>
+                        {% endif %}
+                        <!-- Similarity Badge -->
+                        <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-coffee-700 text-xs font-bold px-2.5 py-1 rounded-lg shadow-sm border border-coffee-100">
+                            {{ item.similarity }}%
+                        </div>
                     </div>
-                {% endif %}
-                <!-- Similarity Badge -->
-                <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-coffee-700 text-xs font-bold px-2.5 py-1 rounded-lg shadow-sm border border-coffee-100">
-                    {{ item.similarity }}%
-                </div>
+                    <!-- Info -->
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-coffee-800 mb-2 group-hover:text-coffee-600 transition-colors">{{ item.menu.nama_menu }}</h3>
+                        <p class="text-xs text-coffee-400 leading-relaxed line-clamp-3">{{ item.menu.description }}</p>
+                    </div>
+                </a>
+                {% endfor %}
             </div>
-            <!-- Info -->
-            <div class="p-5">
-                <h3 class="text-lg font-bold text-coffee-800 mb-2 group-hover:text-coffee-600 transition-colors">{{ item.menu.nama_menu }}</h3>
-                <p class="text-xs text-coffee-400 leading-relaxed line-clamp-3">{{ item.menu.description }}</p>
-            </div>
-        </a>
-        {% endfor %}
-    </div>
 
-    <!-- Action -->
-    <div class="flex justify-center gap-4">
-        <a href="{% url 'recommendation:form' %}" class="btn-glow bg-gradient-to-r from-coffee-600 to-coffee-700 text-white font-semibold py-3 px-8 rounded-xl text-sm shadow-md">
-            Cari Lagi
-        </a>
+            <!-- Action -->
+            <div class="flex justify-center gap-4">
+                <a href="{% url 'recommendation:form' %}" class="btn-glow bg-gradient-to-r from-coffee-600 to-coffee-700 text-white font-semibold py-3 px-8 rounded-xl text-sm shadow-md">
+                    Cari Lagi
+                </a>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="w-full lg:w-80 shrink-0">
+            <div class="bg-white rounded-2xl shadow-md border border-coffee-100/60 p-6">
+                <h2 class="text-lg font-bold text-coffee-800 mb-4 pb-2 border-b border-coffee-100 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-coffee-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    Skor Rekomendasi
+                </h2>
+                {% if top_3_history %}
+                    <div class="flex flex-col gap-4">
+                        {% for item in top_3_history %}
+                        <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-coffee-50/50 transition-colors">
+                            <div class="w-10 h-10 rounded-lg bg-coffee-100 flex items-center justify-center shrink-0 text-coffee-700 font-bold text-sm">
+                                #{{ forloop.counter }}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-sm font-semibold text-coffee-800 truncate">{{ item.menu.nama_menu }}</h4>
+                                <p class="text-xs text-coffee-400 font-medium">{{ item.count }} kali direkomendasikan</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-sm text-coffee-400 text-center py-4">Belum ada riwayat preferensi.</p>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
